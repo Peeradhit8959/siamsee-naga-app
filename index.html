@@ -78,17 +78,26 @@
     }
 
     async function drawFortune() {
-      const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9akp-rvFKeM0iRYvTJ9X7wh8_A2J_d6hgrz-XP9RwCkUggKnSGm8czqod3dWVLzH_tBh4EMrnxslx/pub?output=tsv';
-      const response = await fetch(sheetURL);
-      const text = await response.text();
-      const rows = text.trim().split('\n').map(row => row.split('\t'));
-      const index = Math.floor(Math.random() * (rows.length - 1)) + 1;
-      const [title, category, message, imageUrl] = rows[index];
+      try {
+        const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9akp-rvFKeM0iRYvTJ9X7wh8_A2J_d6hgrz-XP9RwCkUggKnSGm8czqod3dWVLzH_tBh4EMrnxslx/pub?output=tsv';
+        const response = await fetch(sheetURL);
+        const text = await response.text();
+        const rows = text.trim().split('\n').map(row => row.split('\t'));
+        const index = Math.floor(Math.random() * (rows.length - 1)) + 1;
+        const [title, category, message, imageUrl] = rows[index];
 
-      document.getElementById('fortuneTitle').textContent = `🔮 ${title}`;
-      document.getElementById('fortuneMessage').textContent = message;
-      document.getElementById('fortuneImage').src = imageUrl;
-      document.getElementById('fortuneBox').style.display = 'block';
+        if (title && message && imageUrl) {
+          document.getElementById('fortuneTitle').textContent = `🔮 ${title}`;
+          document.getElementById('fortuneMessage').textContent = message;
+          document.getElementById('fortuneImage').src = imageUrl;
+          document.getElementById('fortuneBox').style.display = 'block';
+        } else {
+          alert("ข้อมูลไม่ครบถ้วน กรุณาลองใหม่อีกครั้ง");
+        }
+      } catch (err) {
+        console.error("เกิดข้อผิดพลาดในการโหลดเซียมซี:", err);
+        alert("ไม่สามารถโหลดคำทำนายได้ กรุณาลองใหม่");
+      }
     }
 
     main();
