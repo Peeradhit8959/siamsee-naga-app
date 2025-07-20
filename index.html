@@ -1,129 +1,56 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>เซียมซีจักรวาล</title>
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
     body {
-      background: linear-gradient(#000428, #004e92);
-      color: #fff;
-      font-family: 'Kanit', sans-serif;
+      font-family: 'Prompt', sans-serif;
+      background: linear-gradient(to bottom, #0f0f2f, #1a1a3d);
+      color: white;
       text-align: center;
-      padding: 2rem;
+      padding: 40px 20px;
     }
     h1 {
-      font-size: 2.2rem;
-      margin-bottom: 1.5rem;
+      font-size: 32px;
+      margin-bottom: 20px;
     }
-    button {
-      background: #FFD700;
+    .button {
+      background: #ffd700;
       color: #000;
+      font-size: 20px;
+      padding: 12px 24px;
+      border-radius: 12px;
       border: none;
-      padding: 1rem 2rem;
-      font-size: 1.2rem;
-      border-radius: 1rem;
       cursor: pointer;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+      transition: 0.3s;
     }
-    button:hover {
+    .button:hover {
       background: #ffa500;
     }
-    .footer {
-      margin-top: 3rem;
-      font-size: 0.9rem;
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
       opacity: 0.7;
-    }
-    .fortune {
-      margin-top: 2rem;
-      background: rgba(255,255,255,0.1);
-      padding: 1.5rem;
-      border-radius: 1rem;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-    }
-    .fortune img {
-      max-width: 100%;
-      border-radius: 1rem;
-      margin-bottom: 1rem;
-    }
-    .fortune h2 {
-      font-size: 1.5rem;
-      color: #FFD700;
-      margin-bottom: 0.5rem;
-    }
-    #shakeImage {
-      max-width: 250px;
-      animation: shake 1.5s ease-in-out;
-      margin: 1rem auto;
-    }
-    @keyframes shake {
-      0% { transform: translateY(0px); }
-      25% { transform: translateY(-20px); }
-      50% { transform: translateY(0px); }
-      75% { transform: translateY(-10px); }
-      100% { transform: translateY(0px); }
     }
   </style>
 </head>
 <body>
-  <h1>เซียมซีจักรวาล โดยองค์นาคราช</h1>
+  <h1>เซียมซีจักรวาล เสียงจากพญานาค</h1>
   <p>จงรวมจิต ตั้งใจ แล้วคลิกปุ่มด้านล่างเพื่อรับคำทำนาย</p>
-  <button onclick="drawFortune()">เสี่ยงเซียมซี</button>
+  <button class="button" onclick="drawFortune()">เสี่ยงเซียมซี</button>
 
-  <img id="shakeImage" src="https://drive.google.com/uc?export=view&id=1xrsE1-JhpNcX1BGjbu8Q5_cN3Il-zEgW" alt="เขย่าเซียมซี">
-
-  <div class="fortune" id="fortuneBox" style="display:none;">
-    <img id="fortuneImage" src="" alt="ภาพเซียมซี">
-    <h2 id="fortuneTitle"></h2>
-    <p id="fortuneMessage"></p>
-  </div>
-
-  <div class="footer">
-    &copy; 2025 พลังแห่งบรรพกาล | Cosmic Naga Fortune
-  </div>
+  <footer>
+    © 2025 พลังแห่งบรรพกาล | Cosmic Naga Fortune
+  </footer>
 
   <script>
-    async function main() {
-      await liff.init({ liffId: "2007784593-xAjD6NXK" });
-      if (!liff.isLoggedIn()) {
-        liff.login();
-      }
+    function drawFortune() {
+      const number = Math.floor(Math.random() * 99 + 1).toString().padStart(2, '0');
+      const webAppUrl = 'https://script.google.com/macros/s/AKfycbzixIyE8Ybp1gQslXkgbcQqkRGoj8UUcCWyscy05EnYf38x5XzBO63BuwT_b2r1ZFU3ew/exec';
+      window.location.href = `${webAppUrl}?number=${number}`;
     }
-
-    async function drawFortune() {
-      try {
-        const sheetURL = 'https://docs.google.com/spreadsheets/d/1-vT6kTTSSxtN0713ejVVxlB0TKmsbm5EdmVpgBRr6_w/gviz/tq?tqx=out:csv&sheet=siamsee_fortunes';
-        const response = await fetch(sheetURL);
-        const text = await response.text();
-
-        const parseCSV = (csvText) => {
-          const lines = csvText.trim().split('\n');
-          return lines.map(line => {
-            const matches = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-            return matches?.map(cell => cell.replace(/^"|"$/g, '').replace(/""/g, '"')) || [];
-          });
-        };
-
-        const rows = parseCSV(text);
-        const index = Math.floor(Math.random() * (rows.length - 1)) + 1;
-        const [, title, message, category, imageUrl] = rows[index];
-
-        if (title && message && imageUrl) {
-          document.getElementById('fortuneTitle').textContent = `🔮 ${title} (${category})`;
-          document.getElementById('fortuneMessage').textContent = message;
-          document.getElementById('fortuneImage').src = imageUrl;
-          document.getElementById('fortuneBox').style.display = 'block';
-        } else {
-          alert("ข้อมูลไม่ครบถ้วน กรุณาลองใหม่อีกครั้ง");
-        }
-      } catch (err) {
-        console.error("เกิดข้อผิดพลาดในการโหลดเซียมซี:", err);
-        alert("ไม่สามารถโหลดคำทำนายได้ กรุณาลองใหม่");
-      }
-    }
-
-    main();
   </script>
 </body>
 </html>
