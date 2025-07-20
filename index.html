@@ -1,106 +1,57 @@
 <!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เซียมซีจักรวาล</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap');
+<html>
+  <head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <title>เซียมซีจักรวาล</title>
+    <style>
+      body {
+        font-family: 'Sarabun', sans-serif;
+        background: radial-gradient(circle, #0b0c29, #000);
+        color: gold;
+        text-align: center;
+        padding: 30px;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid gold;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 0 30px gold;
+      }
+      button {
+        font-size: 18px;
+        padding: 15px 30px;
+        background: gold;
+        color: black;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      .fortune-box {
+        margin-top: 20px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 10px;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🪬 เซียมซีจักรวาล 🪬</h1>
+      <p>จงตั้งจิตให้สงบ แล้วกด “เสี่ยงเซียมซี”</p>
+      <button onclick="drawFortune()">เสี่ยงเซียมซี</button>
+      <div class="fortune-box" id="fortuneBox"></div>
+    </div>
 
-    body {
-      margin: 0;
-      font-family: 'Sarabun', sans-serif;
-      background: linear-gradient(135deg, #0b0f33, #1a1a2e);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      padding: 2rem;
-      background-image: url('https://cdn.pixabay.com/photo/2016/11/29/04/17/astrology-1869190_1280.jpg');
-      background-size: cover;
-      background-position: center;
-    }
-
-    .container {
-      background: rgba(0, 0, 0, 0.6);
-      border-radius: 20px;
-      padding: 2rem;
-      max-width: 600px;
-      width: 100%;
-      box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
-    }
-
-    h1 {
-      font-size: 2.2rem;
-      margin-bottom: 1rem;
-      color: #ffd700;
-      text-align: center;
-    }
-
-    .shake-button {
-      background: linear-gradient(to right, #ffd700, #ff9900);
-      color: #000;
-      font-weight: bold;
-      border: none;
-      border-radius: 12px;
-      padding: 1rem 2rem;
-      cursor: pointer;
-      font-size: 1.2rem;
-      transition: all 0.3s ease;
-      width: 100%;
-      margin-top: 1.5rem;
-    }
-
-    .shake-button:hover {
-      background: #fff6cc;
-    }
-
-    #result {
-      margin-top: 2rem;
-      font-size: 1.1rem;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 1rem;
-      border-radius: 10px;
-      box-shadow: inset 0 0 10px #ffd700;
-      line-height: 1.6;
-    }
-
-    .footer {
-      margin-top: 3rem;
-      font-size: 0.9rem;
-      color: #bbb;
-      text-align: center;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>✨ เสี่ยงเซียมซีจักรวาล ✨</h1>
-    <p style="text-align:center">ขอพรจากพลังจักรวาล คำทำนายจะปรากฏจากเบื้องบน</p>
-    <button class="shake-button" onclick="drawFortune()">เสี่ยงเซียมซี</button>
-    <div id="result"></div>
-  </div>
-
-  <div class="footer">&copy; 2025 คนชอบดูดวง | พลังแห่งดวงดาวและโชคชะตา</div>
-
-  <script>
-    function drawFortune() {
-      fetch("https://script.google.com/macros/s/AKfycbzixIyE8Ybp1gQslXkgbcQqkRGoj8UUcCWyscy05EnYf38x5XzBO63BuwT_b2r1ZFU3ew/exec")
-        .then(res => res.json())
-        .then(data => {
-          if (data && data.message) {
-            document.getElementById("result").innerHTML = `<strong>คำทำนาย:</strong><br>${data.message}`;
-          } else {
-            document.getElementById("result").innerHTML = "เกิดข้อผิดพลาดในการโหลดคำทำนาย กรุณาลองใหม่อีกครั้ง.";
-          }
-        })
-        .catch(err => {
-          console.error("Error:", err);
-          document.getElementById("result").innerHTML = "ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ กรุณาลองใหม่ภายหลัง.";
-        });
-    }
-  </script>
-</body>
+    <script>
+      function drawFortune() {
+        google.script.run.withSuccessHandler(function(result) {
+          document.getElementById("fortuneBox").innerHTML = `<h2>ใบที่ ${result.number}</h2><p>${result.message}</p>`;
+        }).getFortune();
+      }
+    </script>
+  </body>
 </html>
