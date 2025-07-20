@@ -1,57 +1,105 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <base target="_top">
-    <meta charset="utf-8">
-    <title>เซียมซีจักรวาล</title>
-    <style>
-      body {
-        font-family: 'Sarabun', sans-serif;
-        background: radial-gradient(circle, #0b0c29, #000);
-        color: gold;
-        text-align: center;
-        padding: 30px;
-      }
-      .container {
-        max-width: 600px;
-        margin: auto;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid gold;
-        border-radius: 20px;
-        padding: 30px;
-        box-shadow: 0 0 30px gold;
-      }
-      button {
-        font-size: 18px;
-        padding: 15px 30px;
-        background: gold;
-        color: black;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-      }
-      .fortune-box {
-        margin-top: 20px;
-        background: rgba(255,255,255,0.1);
-        border-radius: 10px;
-        padding: 20px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>🪬 เซียมซีจักรวาล 🪬</h1>
-      <p>จงตั้งจิตให้สงบ แล้วกด “เสี่ยงเซียมซี”</p>
-      <button onclick="drawFortune()">เสี่ยงเซียมซี</button>
-      <div class="fortune-box" id="fortuneBox"></div>
-    </div>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>เซียมซีจักรวาล</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Prompt', sans-serif;
+      background: linear-gradient(to bottom right, #000028, #1e144e);
+      color: #fefefe;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-    <script>
-      function drawFortune() {
-        google.script.run.withSuccessHandler(function(result) {
-          document.getElementById("fortuneBox").innerHTML = `<h2>ใบที่ ${result.number}</h2><p>${result.message}</p>`;
-        }).getFortune();
-      }
-    </script>
-  </body>
+    .container {
+      text-align: center;
+      max-width: 500px;
+      padding: 2rem;
+      background: rgba(0,0,0,0.4);
+      border: 2px solid gold;
+      border-radius: 30px;
+      box-shadow: 0 0 30px #ffd70066;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: gold;
+      margin-bottom: 1.2rem;
+    }
+
+    button {
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      background: gold;
+      border: none;
+      color: #000;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ffeb3b;
+    }
+
+    button:hover {
+      background: #fff59d;
+    }
+
+    .result {
+      margin-top: 2rem;
+      animation: fadeIn 1s ease;
+    }
+
+    .result img {
+      max-width: 100%;
+      border-radius: 15px;
+      margin-bottom: 1rem;
+    }
+
+    .result h2 {
+      color: #ffd700;
+      font-size: 1.4rem;
+      margin: 0.5rem 0;
+    }
+
+    .result p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>เซียมซีจักรวาล</h1>
+    <button onclick="drawFortune()">เสี่ยงเซียมซี</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function drawFortune() {
+      document.getElementById("result").innerHTML = "⏳ กำลังเสี่ยงเซียมซี...";
+      google.script.run.withSuccessHandler(showFortune).getFortune;
+    }
+
+    function showFortune(data) {
+      const html = `
+        <div>
+          <img src="${data.imageUrl}" alt="ใบเซียมซี" />
+          <h2>ใบที่ ${data.number} — ${data.title}</h2>
+          <p><strong>หมวด:</strong> ${data.category}</p>
+          <p>${data.message}</p>
+        </div>
+      `;
+      document.getElementById("result").innerHTML = html;
+    }
+  </script>
+</body>
 </html>
