@@ -52,12 +52,26 @@
       color: #FFD700;
       margin-bottom: 0.5rem;
     }
+    #shakeImage {
+      max-width: 250px;
+      animation: shake 1.5s ease-in-out;
+      margin: 1rem auto;
+    }
+    @keyframes shake {
+      0% { transform: translateY(0px); }
+      25% { transform: translateY(-20px); }
+      50% { transform: translateY(0px); }
+      75% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
   </style>
 </head>
 <body>
   <h1>เซียมซีจักรวาล โดยองค์นาคราช</h1>
   <p>จงรวมจิต ตั้งใจ แล้วคลิกปุ่มด้านล่างเพื่อรับคำทำนาย</p>
   <button onclick="drawFortune()">เสี่ยงเซียมซี</button>
+
+  <img id="shakeImage" src="https://drive.google.com/uc?export=view&id=1xrsE1-JhpNcX1BGjbu8Q5_cN3Il-zEgW" alt="เขย่าเซียมซี">
 
   <div class="fortune" id="fortuneBox" style="display:none;">
     <img id="fortuneImage" src="" alt="ภาพเซียมซี">
@@ -82,12 +96,21 @@
         const sheetURL = 'https://docs.google.com/spreadsheets/d/1-vT6kTTSSxtN0713ejVVxlB0TKmsbm5EdmVpgBRr6_w/gviz/tq?tqx=out:csv&sheet=siamsee_fortunes';
         const response = await fetch(sheetURL);
         const text = await response.text();
-        const rows = text.trim().split('\n').map(row => row.split(','));
+
+        const parseCSV = (csvText) => {
+          const lines = csvText.trim().split('\n');
+          return lines.map(line => {
+            const matches = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
+            return matches?.map(cell => cell.replace(/^"|"$/g, '').replace(/""/g, '"')) || [];
+          });
+        };
+
+        const rows = parseCSV(text);
         const index = Math.floor(Math.random() * (rows.length - 1)) + 1;
-        const [title, category, message, imageUrl] = rows[index];
+        const [, title, message, category, imageUrl] = rows[index];
 
         if (title && message && imageUrl) {
-          document.getElementById('fortuneTitle').textContent = `🔮 ${title}`;
+          document.getElementById('fortuneTitle').textContent = `🔮 ${title} (${category})`;
           document.getElementById('fortuneMessage').textContent = message;
           document.getElementById('fortuneImage').src = imageUrl;
           document.getElementById('fortuneBox').style.display = 'block';
