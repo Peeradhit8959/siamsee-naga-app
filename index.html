@@ -1,56 +1,71 @@
 <!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>เซียมซีจักรวาล</title>
-  <style>
-    body {
-      font-family: 'Prompt', sans-serif;
-      background: linear-gradient(to bottom, #0f0f2f, #1a1a3d);
-      color: white;
-      text-align: center;
-      padding: 40px 20px;
-    }
-    h1 {
-      font-size: 32px;
-      margin-bottom: 20px;
-    }
-    .button {
-      background: #ffd700;
-      color: #000;
-      font-size: 20px;
-      padding: 12px 24px;
-      border-radius: 12px;
-      border: none;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    .button:hover {
-      background: #ffa500;
-    }
-    footer {
-      margin-top: 40px;
-      font-size: 14px;
-      opacity: 0.7;
-    }
-  </style>
-</head>
-<body>
-  <h1>เซียมซีจักรวาล เสียงจากพญานาค</h1>
-  <p>จงรวมจิต ตั้งใจ แล้วคลิกปุ่มด้านล่างเพื่อรับคำทำนาย</p>
-  <button class="button" onclick="drawFortune()">เสี่ยงเซียมซี</button>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap');
 
-  <footer>
-    © 2025 พลังแห่งบรรพกาล | Cosmic Naga Fortune
-  </footer>
+      body {
+        font-family: 'Sarabun', sans-serif;
+        background: linear-gradient(to bottom, #000015, #0a0a2a);
+        color: gold;
+        text-align: center;
+        padding: 2em;
+      }
 
-  <script>
-    function drawFortune() {
-      const number = Math.floor(Math.random() * 99 + 1).toString().padStart(2, '0');
-      const webAppUrl = 'https://script.google.com/macros/s/AKfycbzixIyE8Ybp1gQslXkgbcQqkRGoj8UUcCWyscy05EnYf38x5XzBO63BuwT_b2r1ZFU3ew/exec';
-      window.location.href = `${webAppUrl}?number=${number}`;
-    }
-  </script>
-</body>
+      h1 {
+        font-size: 2.5em;
+        margin-bottom: 1em;
+        color: #ffe066;
+        text-shadow: 0 0 15px rgba(255,255,255,0.3);
+      }
+
+      #result {
+        margin-top: 2em;
+        font-size: 1.5em;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1.5em;
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        display: none;
+      }
+
+      button {
+        background: linear-gradient(135deg, #ffd700, #ffa500);
+        border: none;
+        padding: 1em 2em;
+        font-size: 1.2em;
+        color: #000;
+        border-radius: 50px;
+        cursor: pointer;
+        box-shadow: 0 5px 20px rgba(255, 215, 0, 0.7);
+        transition: transform 0.3s ease;
+      }
+
+      button:hover {
+        transform: scale(1.05);
+      }
+
+      img {
+        width: 150px;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="https://cdn-icons-png.flaticon.com/512/3330/3330316.png" alt="เซียมซี">
+    <h1>เสี่ยงเซียมซีจักรวาล</h1>
+    <button onclick="drawFortune()">✨ เสี่ยงเซียมซี ✨</button>
+    <div id="result"></div>
+
+    <script>
+      function drawFortune() {
+        document.getElementById("result").innerHTML = "⏳ กำลังเสี่ยงเซียมซี...";
+        document.getElementById("result").style.display = "block";
+        google.script.run.withSuccessHandler(function(response) {
+          document.getElementById("result").innerHTML = response;
+        }).getFortune();
+      }
+    </script>
+  </body>
 </html>
