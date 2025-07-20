@@ -35,12 +35,35 @@
       font-size: 0.9rem;
       opacity: 0.7;
     }
+    .fortune {
+      margin-top: 2rem;
+      background: rgba(255,255,255,0.1);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+    .fortune img {
+      max-width: 100%;
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+    }
+    .fortune h2 {
+      font-size: 1.5rem;
+      color: #FFD700;
+      margin-bottom: 0.5rem;
+    }
   </style>
 </head>
 <body>
   <h1>เซียมซีจักรวาล โดยองค์นาคราช</h1>
   <p>จงรวมจิต ตั้งใจ แล้วคลิกปุ่มด้านล่างเพื่อรับคำทำนาย</p>
-  <button onclick="sendMessage()">เสี่ยงเซียมซี</button>
+  <button onclick="drawFortune()">เสี่ยงเซียมซี</button>
+
+  <div class="fortune" id="fortuneBox" style="display:none;">
+    <img id="fortuneImage" src="" alt="ภาพเซียมซี">
+    <h2 id="fortuneTitle"></h2>
+    <p id="fortuneMessage"></p>
+  </div>
 
   <div class="footer">
     &copy; 2025 พลังแห่งบรรพกาล | Cosmic Naga Fortune
@@ -54,21 +77,18 @@
       }
     }
 
-    async function sendMessage() {
-      if (liff.isInClient()) {
-        liff.sendMessages([
-          {
-            type: 'text',
-            text: 'เซียมซี'
-          }
-        ]).then(() => {
-          liff.closeWindow();
-        }).catch(err => {
-          alert('เกิดข้อผิดพลาดในการส่งข้อความ: ' + err);
-        });
-      } else {
-        alert('กรุณาเปิดผ่านแอป LINE เพื่อใช้งานเสี่ยงเซียมซี');
-      }
+    async function drawFortune() {
+      const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT9akp-rvFKeM0iRYvTJ9X7wh8_A2J_d6hgrz-XP9RwCkUggKnSGm8czqod3dWVLzH_tBh4EMrnxslx/pub?output=tsv';
+      const response = await fetch(sheetURL);
+      const text = await response.text();
+      const rows = text.trim().split('\n').map(row => row.split('\t'));
+      const index = Math.floor(Math.random() * (rows.length - 1)) + 1;
+      const [title, category, message, imageUrl] = rows[index];
+
+      document.getElementById('fortuneTitle').textContent = `🔮 ${title}`;
+      document.getElementById('fortuneMessage').textContent = message;
+      document.getElementById('fortuneImage').src = imageUrl;
+      document.getElementById('fortuneBox').style.display = 'block';
     }
 
     main();
