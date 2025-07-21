@@ -4,98 +4,85 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>เซียมซีพญานาค</title>
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
     body {
-      background: linear-gradient(to bottom, #000010, #0c0c30);
-      color: #fff;
+      background: linear-gradient(to bottom right, #e0f7fa, #fff8e1);
       font-family: 'Sarabun', sans-serif;
+      color: #333;
       text-align: center;
-      padding: 20px;
+      padding: 2em;
     }
-    .card {
-      background-color: rgba(0,0,0,0.6);
-      border: 2px solid gold;
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
       border-radius: 20px;
-      padding: 20px;
-      margin-top: 20px;
-      box-shadow: 0 0 20px gold;
+      padding: 2em;
+      box-shadow: 0 0 20px rgba(212,175,55,0.3);
+    }
+    .title {
+      color: #1976d2;
+      font-size: 2em;
+      margin-bottom: 1em;
+    }
+    .gold {
+      color: #d4af37;
+    }
+    #fortuneResult {
+      margin-top: 2em;
+      display: none;
+    }
+    button {
+      background: #1976d2;
+      color: white;
+      padding: 1em 2em;
+      border: none;
+      font-size: 1.1em;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 5px 10px rgba(25, 118, 210, 0.2);
+    }
+    button:hover {
+      background: #0d47a1;
     }
     img {
       max-width: 100%;
-      border-radius: 15px;
-    }
-    h1 {
-      font-size: 2em;
-      color: #FFD700;
-    }
-    #fortune-result {
-      display: none;
-    }
-    .btn {
-      background: #FFD700;
-      color: #000;
-      font-size: 1.2em;
-      padding: 10px 20px;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-top: 20px;
+      border-radius: 12px;
+      margin-bottom: 1em;
     }
   </style>
 </head>
 <body>
-  <h1>เซียมซีพญานาค</h1>
-  <button class="btn" onclick="getFortune()">เสี่ยงเซียมซี</button>
+  <div class="container">
+    <div class="title">เซียมซี <span class="gold">พญานาค</span></div>
+    <img id="shakeImage" src="https://drive.google.com/uc?export=view&id=1xrsE1-JhpNcX1BGjbu8Q5_cN3Il-zEgW" alt="เขย่าเซียมซี" />
+    <p>ขอจงตั้งจิตแน่วแน่ แล้วคลิกเพื่อรับนิมิตจากองค์นาคราช</p>
+    <button onclick="fetchFortune()">เริ่มเขย่าเซียมซี</button>
 
-  <div id="fortune-result" class="card">
-    <h2 id="fortune-title"></h2>
-    <img id="fortune-img" src="" alt="" />
-    <p id="fortune-text"></p>
+    <div id="fortuneResult"></div>
+
+    <hr style="margin-top: 3em;" />
+    <p><strong>ตำนานพญานาคแห่งคำชะโนด</strong><br/>
+      เชื่อกันว่า ณ ป่าคำชะโนด จังหวัดอุดรธานี คือประตูเชื่อมสู่เมืองบาดาลอันศักดิ์สิทธิ์ อาณาจักรของพญานาคราชศรีสุทโธและนางนาคี<br/>
+      ผู้ศรัทธามากมายเดินทางมาเพื่อขอพร ปาฏิหาริย์ และความสำเร็จ จงศรัทธาในสัญญาณ และเปิดใจรับนิมิตแห่งโชคชะตา.
+    </p>
   </div>
 
   <script>
-    const webAppUrl = "https://script.google.com/macros/s/AKfycbwvaM_IegwU8Gk3M_Gcwa3RMAfyLd9sIb-qK6EBASSGRlqvQ5hhVHD3-OLvEb_f-RtGig/exec";
-    const liffId = "2007784593-xAjD6NXK"; // LIFF ID ของคุณ
+    async function fetchFortune() {
+      const res = await fetch("https://script.google.com/macros/s/AKfycbwvaM_IegwU8Gk3M_Gcwa3RMAfyLd9sIb-qK6EBASSGRlqvQ5hhVHD3-OLvEb_f-RtGig/exec");
+      const data = await res.json();
 
-    async function initLIFF() {
-      try {
-        await liff.init({ liffId });
-        if (!liff.isLoggedIn()) {
-          liff.login();
-        } else {
-          console.log("LIFF initialized and user is logged in");
-        }
-      } catch (err) {
-        console.error("LIFF init error", err);
-        alert("ไม่สามารถโหลด LIFF ได้ กรุณาลองใหม่อีกครั้ง");
-      }
+      document.getElementById("fortuneResult").style.display = "block";
+      document.getElementById("fortuneResult").innerHTML = `
+        <h2>ผลการเซียมซี</h2>
+        <p><strong>ใบที่:</strong> ${data.number}</p>
+        <p><strong>คำทำนาย:</strong> ${data.message}</p>
+        <img src="${data.image}" alt="คำทำนายใบเซียมซี" />
+      `;
+
+      document.getElementById("shakeImage").style.display = "none"; // ซ่อนภาพเขย่า
     }
-
-    async function getFortune() {
-      try {
-        const index = Math.floor(Math.random() * 99) + 1;
-        const response = await fetch(`${webAppUrl}?index=${index}`);
-        const htmlText = await response.text();
-
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlText, 'text/html');
-
-        const title = doc.querySelector('h2')?.innerText || "ไม่มีข้อมูล";
-        const img = doc.querySelector('img')?.src || "";
-        const text = doc.querySelector('p')?.innerText || "ไม่มีคำทำนาย";
-
-        document.getElementById('fortune-title').innerText = title;
-        document.getElementById('fortune-img').src = img;
-        document.getElementById('fortune-text').innerText = text;
-        document.getElementById('fortune-result').style.display = "block";
-
-      } catch (err) {
-        console.error("Error fetching fortune:", err);
-        alert("เกิดข้อผิดพลาด กรุณาลองใหม่");
-      }
-    }
-
-    initLIFF();
   </script>
 </body>
 </html>
