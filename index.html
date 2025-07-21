@@ -55,33 +55,23 @@
 
   <script>
     const webAppUrl = "https://script.google.com/macros/s/AKfycbwvaM_IegwU8Gk3M_Gcwa3RMAfyLd9sIb-qK6EBASSGRlqvQ5hhVHD3-OLvEb_f-RtGig/exec";
-    const liffId = "YOUR_LIFF_ID"; // <-- เปลี่ยนเป็น LIFF ID ของคุณ
+    const liffId = "2007784593-xAjD6NXK"; // ← LIFF ID จริงของคุณ
 
     async function initLIFF() {
-      await liff.init({ liffId });
-      if (!liff.isLoggedIn()) {
-        liff.login();
+      try {
+        await liff.init({ liffId });
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          console.log("LIFF initialized and user is logged in");
+        }
+      } catch (err) {
+        console.error("LIFF init error", err);
+        alert("ไม่สามารถโหลด LIFF ได้ กรุณาลองใหม่อีกครั้ง");
       }
     }
 
     async function getFortune() {
-      const index = Math.floor(Math.random() * 99) + 1;
-      const response = await fetch(`${webAppUrl}?index=${index}`);
-      const htmlText = await response.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(htmlText, 'text/html');
-
-      const title = doc.querySelector('h2')?.innerText || "ไม่มีข้อมูล";
-      const img = doc.querySelector('img')?.src || "";
-      const text = doc.querySelector('p')?.innerText || "ไม่มีคำทำนาย";
-
-      document.getElementById('fortune-title').innerText = title;
-      document.getElementById('fortune-img').src = img;
-      document.getElementById('fortune-text').innerText = text;
-      document.getElementById('fortune-result').style.display = "block";
-    }
-
-    initLIFF();
-  </script>
-</body>
-</html>
+      try {
+        const index = Math.floor(Math.random() * 99) + 1;
+        const response = await fetch(`$
