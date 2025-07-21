@@ -1,23 +1,103 @@
-<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-<script>
-  const liffId = "2007784593-QVvb7dwZ"; // LIFF ID ของคุณ
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เซียมซีพญานาค</title>
+  <style>
+    body {
+      font-family: 'Prompt', sans-serif;
+      background: linear-gradient(to bottom, #dbeafe, #ffffff);
+      color: #333;
+      text-align: center;
+      padding: 20px;
+    }
+    .shake-image {
+      width: 200px;
+      animation: shake 1s infinite;
+    }
+    @keyframes shake {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(2deg); }
+      75% { transform: rotate(-2deg); }
+    }
+    #fortuneResult {
+      margin-top: 20px;
+      border: 2px solid #facc15;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #fff;
+      color: #111827;
+      display: none;
+    }
+    .button {
+      background-color: #facc15;
+      color: #1e3a8a;
+      padding: 10px 20px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .article {
+      text-align: left;
+      margin-top: 40px;
+      background: #f0f9ff;
+      padding: 20px;
+      border-radius: 10px;
+    }
+  </style>
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+</head>
+<body>
+  <h1>เซียมซีพญานาค</h1>
+  <img id="shakeImage" class="shake-image" src="https://drive.google.com/uc?export=view&id=1xrsE1-JhpNcX1BGjbu8Q5_cN3Il-zEgW" alt="เขย่าเซียมซี">
+  <div id="fortuneResult"></div>
+  <button class="button" onclick="fetchFortune()">ขอเซียมซีอีกครั้ง</button>
 
-  async function initializeLiff() {
-    try {
+  <div class="article">
+    <h2>ปาฏิหาริย์แห่งพญานาค</h2>
+    <p>
+      ณ ดินแดนอันศักดิ์สิทธิ์ “คำชะโนด” เล่าขานตำนานพญานาคผู้พิทักษ์เส้นทางระหว่างโลกมนุษย์และเมืองบาดาล
+      พญาศรีสุทโธและพระนางศรีปทุมมา ทรงเป็นผู้ดูแลขุมพลังแห่งศรัทธาและปาฏิหาริย์
+      ผู้ศรัทธาเมื่อมาขอพรจากท่าน มักได้รับการดลบันดาลอย่างน่าอัศจรรย์
+      การเขย่าเซียมซีนี้ จึงเปรียบเสมือนการเปิดประตูสู่คำทำนายจากพญานาค เพื่อแนะนำแนวทางชีวิตที่เหมาะสม
+    </p>
+  </div>
+
+  <script>
+    async function fetchFortune() {
+      document.getElementById("fortuneResult").style.display = "none";
+      document.getElementById("shakeImage").style.animation = "shake 1s infinite";
+
+      const liffId = "2007784593-QVvb7dwZ";
       await liff.init({ liffId });
 
       if (!liff.isLoggedIn()) {
         liff.login();
-      } else {
-        console.log("✅ LIFF Initialized");
+        return;
       }
-    } catch (err) {
-      console.error("❌ LIFF Init Error:", err);
-      alert("ไม่สามารถเชื่อมต่อกับ LIFF ได้ กรุณาลองใหม่");
-    }
-  }
 
-  window.onload = () => {
-    initializeLiff();
-  };
-</script>
+      const profile = await liff.getProfile();
+      const userId = profile.userId;
+
+      const res = await fetch("https://script.google.com/macros/s/AKfycbwvaM_IegwU8Gk3M_Gcwa3RMAfyLd9sIb-qK6EBASSGRlqvQ5hhVHD3-OLvEb_f-RtGig/exec?userId=" + userId);
+      const data = await res.json();
+
+      document.getElementById("shakeImage").style.animation = "none";
+
+      document.getElementById("fortuneResult").innerHTML = `
+        <h2>ผลการเซียมซี</h2>
+        <p><strong>ใบที่:</strong> ${data.number}</p>
+        <p><strong>คำทำนาย:</strong> ${data.message}</p>
+        <img src="${data.image}" width="200" />
+      `;
+
+      document.getElementById("fortuneResult").style.display = "block";
+    }
+
+    window.onload = fetchFortune;
+  </script>
+</body>
+</html>
