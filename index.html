@@ -2,104 +2,86 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>เซียมซีจักรวาล</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>เซียมซีพญานาค</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
     body {
-      margin: 0;
-      font-family: 'Prompt', sans-serif;
-      background: linear-gradient(to bottom right, #000028, #1e144e);
-      color: #fefefe;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .container {
+      background: linear-gradient(to bottom, #000010, #0c0c30);
+      color: #fff;
+      font-family: 'Sarabun', sans-serif;
       text-align: center;
-      max-width: 500px;
-      padding: 2rem;
-      background: rgba(0,0,0,0.4);
+      padding: 20px;
+    }
+    .card {
+      background-color: rgba(0,0,0,0.6);
       border: 2px solid gold;
-      border-radius: 30px;
-      box-shadow: 0 0 30px #ffd70066;
+      border-radius: 20px;
+      padding: 20px;
+      margin-top: 20px;
+      box-shadow: 0 0 20px gold;
     }
-
-    h1 {
-      font-size: 2.2rem;
-      color: gold;
-      margin-bottom: 1.2rem;
-    }
-
-    button {
-      padding: 1rem 2rem;
-      font-size: 1.2rem;
-      background: gold;
-      border: none;
-      color: #000;
-      border-radius: 25px;
-      cursor: pointer;
-      box-shadow: 0 0 10px #ffeb3b;
-    }
-
-    button:hover {
-      background: #fff59d;
-    }
-
-    .result {
-      margin-top: 2rem;
-      animation: fadeIn 1s ease;
-    }
-
-    .result img {
+    img {
       max-width: 100%;
       border-radius: 15px;
-      margin-bottom: 1rem;
     }
-
-    .result h2 {
-      color: #ffd700;
-      font-size: 1.4rem;
-      margin: 0.5rem 0;
+    h1 {
+      font-size: 2em;
+      color: #FFD700;
     }
-
-    .result p {
-      font-size: 1.1rem;
-      line-height: 1.6;
+    #fortune-result {
+      display: none;
     }
-
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
+    .btn {
+      background: #FFD700;
+      color: #000;
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>เซียมซีจักรวาล</h1>
-    <button onclick="drawFortune()">เสี่ยงเซียมซี</button>
-    <div class="result" id="result"></div>
+  <h1>เซียมซีพญานาค</h1>
+  <button class="btn" onclick="getFortune()">เสี่ยงเซียมซี</button>
+
+  <div id="fortune-result" class="card">
+    <h2 id="fortune-title"></h2>
+    <img id="fortune-img" src="" alt="" />
+    <p id="fortune-text"></p>
   </div>
 
   <script>
-    function drawFortune() {
-      document.getElementById("result").innerHTML = "⏳ กำลังเสี่ยงเซียมซี...";
-      google.script.run.withSuccessHandler(showFortune).getFortune;
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbwvaM_IegwU8Gk3M_Gcwa3RMAfyLd9sIb-qK6EBASSGRlqvQ5hhVHD3-OLvEb_f-RtGig/exec";
+    const liffId = "YOUR_LIFF_ID"; // <-- เปลี่ยนเป็น LIFF ID ของคุณ
+
+    async function initLIFF() {
+      await liff.init({ liffId });
+      if (!liff.isLoggedIn()) {
+        liff.login();
+      }
     }
 
-    function showFortune(data) {
-      const html = `
-        <div>
-          <img src="${data.imageUrl}" alt="ใบเซียมซี" />
-          <h2>ใบที่ ${data.number} — ${data.title}</h2>
-          <p><strong>หมวด:</strong> ${data.category}</p>
-          <p>${data.message}</p>
-        </div>
-      `;
-      document.getElementById("result").innerHTML = html;
+    async function getFortune() {
+      const index = Math.floor(Math.random() * 99) + 1;
+      const response = await fetch(`${webAppUrl}?index=${index}`);
+      const htmlText = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlText, 'text/html');
+
+      const title = doc.querySelector('h2')?.innerText || "ไม่มีข้อมูล";
+      const img = doc.querySelector('img')?.src || "";
+      const text = doc.querySelector('p')?.innerText || "ไม่มีคำทำนาย";
+
+      document.getElementById('fortune-title').innerText = title;
+      document.getElementById('fortune-img').src = img;
+      document.getElementById('fortune-text').innerText = text;
+      document.getElementById('fortune-result').style.display = "block";
     }
+
+    initLIFF();
   </script>
 </body>
 </html>
