@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ฝากทำบุญตักบาตร</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: 'Sarabun' for Thai text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- LINE Front-end Framework (LIFF) SDK -->
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        body { font-family: 'Sarabun', sans-serif; }
+        .gradient-header { background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); }
+        .content-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 10px -1px rgb(0 0 0 / 0.05), 0 2px 6px -2px rgb(0 0 0 / 0.05);
+            border: 1px solid #f3f4f6;
+        }
+        h2 {
+            font-size: 1.25rem; font-weight: 700; color: #166534;
+            margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #4ade80;
+        }
+        p { line-height: 1.75; color: #4b5563; margin-bottom: 1rem; }
+        /* Loading spinner style */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #16a34a;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div id="liff-app-container" class="max-w-lg mx-auto bg-gray-50 min-h-screen">
+        
+        <header class="gradient-header text-white text-center p-6 rounded-b-3xl shadow-lg sticky top-0 z-10">
+            <h1 class="text-2xl font-bold">ชุดฝากทำบุญตักบาตร เสริมดวงชะตา</h1>
+        </header>
+
+        <main class="p-4">
+            
+            <!-- Image Gallery -->
+            <div class="grid grid-cols-2 gap-2 mb-6">
+                <img src="https://lh3.googleusercontent.com/d/15q8Xc9lWzXZx8qZIj8T9i4Yri7pyT2Lv" class="w-full h-32 object-cover rounded-lg shadow-md" alt="">
+                <img src="https://lh3.googleusercontent.com/d/1OnzBGocR5rlziRwllyAytOxdeoKd-PeX" class="w-full h-32 object-cover rounded-lg shadow-md" alt="">
+                <img src="https://lh3.googleusercontent.com/d/1JzvKremaSBDHiWTyVFXVOu5iXbbVJDtt" class="w-full h-32 object-cover rounded-lg shadow-md" alt="">
+                <img src="https://lh3.googleusercontent.com/d/1qTUvRA6CdNwl_W-OgLPQxtXon_Gt4x3s" class="w-full h-32 object-cover rounded-lg shadow-md" alt="">
+            </div>
+
+            <div class="content-card">
+                <h2>สะพานบุญสู่ความสำเร็จ</h2>
+                <p>
+                    เพื่อความสะดวกของลูกค้าที่มีความปรารถนาในการสร้างบุญกุศล ทางหมอวินจึงได้จัดเตรียมชุดตักบาตรเพื่อเป็นสะพานบุญให้ท่านได้สร้างทานบารมี แม้ไม่สามารถทำได้ด้วยตนเอง แต่จิตศรัทธาและทรัพย์ของท่านจะได้รับอานิสงส์ผลบุญเป็นคนแรกอย่างแน่นอน
+                </p>
+            </div>
+
+            <div class="content-card">
+                <h2>รายละเอียด Package (1 วัน)</h2>
+                <div class="text-center mb-4">
+                    <p class="text-3xl font-bold text-green-600 my-2">ชุดละ 40 บาท</p>
+                </div>
+                <ul class="list-disc list-inside text-gray-700 space-y-1 pl-2">
+                    <li>ข้าวสวย</li>
+                    <li>อาหารคาว 1 อย่าง</li>
+                    <li>ของหวาน</li>
+                    <li>น้ำดื่ม</li>
+                    <li>ดอกไม้สำหรับถวายพระ</li>
+                </ul>
+            </div>
+
+            <div class="content-card">
+                <h2>ขั้นตอนการฝากทำบุญ</h2>
+                <ol class="list-decimal list-inside text-gray-700 space-y-2">
+                    <li>เลือกแพ็กเกจที่ต้องการ (ทำบุญ 1 วัน, 3 วัน, หรือ 9 วัน)</li>
+                    <li>ชำระเงินโดยกดปุ่ม "สั่งซื้อชุดตักบาตร" ด้านล่าง</li>
+                    <li>เมื่อแอดมินตรวจสอบแล้ว จะยืนยันข้อมูลเพื่อให้ท่านเลือกวันและระบุคำอธิษฐาน</li>
+                    <li>แอดมินจะส่งรูปภาพหลักฐานการตักบาตรให้ท่านในห้องแชท</li>
+                </ol>
+                <p class="text-sm text-center mt-4 text-red-600 font-semibold">**ปิดรับออเดอร์ทุกวัน เวลา 18:00 น.**</p>
+            </div>
+
+            <!-- Action Button & Bank Details Section -->
+            <div id="action-section" class="content-card text-center">
+                <!-- This button will be hidden after click -->
+                <button id="order-button" onclick="showBankDetails()" class="w-full bg-green-500 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:bg-green-600 transition-colors duration-300">
+                    สั่งซื้อชุดตักบาตร (40 บาท)
+                </button>
+
+                <!-- Bank details, hidden by default -->
+                <div id="bank-details" class="hidden">
+                    <h3 class="font-semibold text-gray-700 mb-3 text-center text-lg">โอนเงินเพื่อร่วมทำบุญ</h3>
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-2 text-left">
+                        <div class="flex justify-between"><span>ธนาคาร:</span><span class="font-bold">กสิกรไทย</span></div>
+                        <div class="flex justify-between"><span>ชื่อบัญชี:</span><span class="font-bold">นาย พีระดิษฐ์ กิตติเขมานนท์</span></div>
+                        <div class="flex justify-between items-center">
+                            <span>เลขที่บัญชี:</span>
+                            <span id="account-number" class="font-bold text-green-600 text-xl">092-2-33444-7</span>
+                        </div>
+                    </div>
+                    <button onclick="copyToClipboard()" class="w-full mt-4 bg-green-100 text-green-700 font-semibold py-2 px-4 rounded-lg hover:bg-green-200 transition-colors duration-300">
+                        คัดลอกเลขที่บัญชี
+                    </button>
+                    <p class="text-sm text-gray-500 mt-4">
+                        เมื่อโอนแล้ว กรุณาปิดหน้านี้ และ **ส่งสลิปของท่านในห้องแชท**
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Gemini API Feature: Prayer Generation (hidden by default) -->
+            <div id="gemini-feature" class="hidden content-card">
+                <h2>✨ สร้างคำอธิษฐานขอพร</h2>
+                <p class="text-sm text-gray-600">เพียงระบุหัวข้อที่ต้องการขอพร (เช่น การงาน, การเงิน, ความรัก, สุขภาพ) แล้ว AI จะช่วยร่างคำอธิษฐานที่สละสลวยให้ท่านเอง</p>
+                
+                <div class="mt-4">
+                    <label for="wish-topic" class="block text-sm font-medium text-gray-700">ระบุหัวข้อที่ต้องการขอพร:</label>
+                    <input type="text" id="wish-topic" placeholder="เช่น ขอให้การงานราบรื่น" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500">
+                </div>
+
+                <button id="generate-button" onclick="generatePrayer()" class="w-full mt-4 bg-green-500 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:bg-green-600 transition-colors duration-300 flex items-center justify-center space-x-2">
+                    <span>สร้างคำอธิษฐาน</span>
+                </button>
+
+                <div id="loader" class="hidden flex justify-center mt-4">
+                    <div class="loader"></div>
+                </div>
+
+                <div id="result-container" class="hidden mt-4">
+                    <label for="prayer-result" class="block text-sm font-medium text-gray-700">คำอธิษฐานของคุณ:</label>
+                    <textarea id="prayer-result" rows="6" class="mt-1 block w-full p-3 bg-gray-50 border border-gray-200 rounded-md shadow-sm" readonly></textarea>
+                    <button onclick="copyPrayer()" class="w-full mt-2 bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors duration-300">
+                        คัดลอกคำอธิษฐาน
+                    </button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Custom Alert Box -->
+    <div id="alert-box" class="hidden fixed top-5 right-5 bg-green-500 text-white py-2 px-4 rounded-lg shadow-xl transition-opacity duration-500">
+        <p id="alert-message"></p>
+    </div>
+
+    <script>
+        // --- LIFF Initialization and Functions ---
+        async function initializeLiff() {
+            try {
+                await liff.init({ liffId: "2007499712-Gq97bgV2" }); // LIFF ID ของคุณ
+                if (!liff.isLoggedIn()) {
+                    liff.login();
+                }
+            } catch (e) {
+                console.error("LIFF initialization failed", e);
+            }
+        }
+        window.onload = function() { initializeLiff(); };
+
+        // --- UI and Helper Functions ---
+        function showAlert(message) {
+            const alertBox = document.getElementById('alert-box');
+            const alertMessage = document.getElementById('alert-message');
+            alertMessage.textContent = message;
+            alertBox.classList.remove('hidden');
+            setTimeout(() => { alertBox.classList.add('hidden'); }, 3000);
+        }
+
+        function copyToClipboard() {
+            const accountNumber = document.getElementById('account-number').innerText.replace(/-/g, '');
+            const textArea = document.createElement("textarea");
+            textArea.value = accountNumber;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showAlert('คัดลอกเลขที่บัญชีแล้ว!');
+            } catch (err) {
+                showAlert('ไม่สามารถคัดลอกได้');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function showBankDetails() {
+            document.getElementById('order-button').classList.add('hidden');
+            document.getElementById('bank-details').classList.remove('hidden');
+            const geminiSection = document.getElementById('gemini-feature');
+            geminiSection.classList.remove('hidden');
+            geminiSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copyPrayer() {
+            const prayerText = document.getElementById('prayer-result');
+            prayerText.select();
+            try {
+                document.execCommand('copy');
+                showAlert('คัดลอกคำอธิษฐานแล้ว!');
+            } catch (err) {
+                showAlert('ไม่สามารถคัดลอกได้');
+            }
+        }
+
+        // --- Gemini API Function ---
+        async function generatePrayer() {
+            const topicInput = document.getElementById('wish-topic');
+            const topic = topicInput.value.trim();
+            if (!topic) {
+                showAlert('กรุณาระบุหัวข้อที่ต้องการขอพร');
+                return;
+            }
+
+            const generateButton = document.getElementById('generate-button');
+            const loader = document.getElementById('loader');
+            const resultContainer = document.getElementById('result-container');
+            const prayerResultTextarea = document.getElementById('prayer-result');
+
+            // Show loader and disable button
+            loader.classList.remove('hidden');
+            generateButton.disabled = true;
+            generateButton.classList.add('opacity-50');
+            resultContainer.classList.add('hidden');
+
+            // Construct the prompt for the Gemini API
+            const prompt = `ช่วยเขียนคำอธิษฐานขอพรสำหรับการทำบุญตักบาตรให้หน่อย โดยเน้นเรื่อง '${topic}' ขอเป็นข้อความที่สละสลวย เป็นทางการ และมีความยาวประมาณ 3-4 ประโยค เหมาะสำหรับส่งให้ผู้จัดทำบุญ`;
+            
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // API key is handled by the environment
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const generatedText = result.candidates[0].content.parts[0].text;
+                    prayerResultTextarea.value = generatedText;
+                    resultContainer.classList.remove('hidden');
+                } else {
+                    prayerResultTextarea.value = "ขออภัย ไม่สามารถสร้างคำอธิษฐานได้ในขณะนี้ กรุณาลองใหม่อีกครั้ง";
+                    resultContainer.classList.remove('hidden');
+                }
+
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                prayerResultTextarea.value = "เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาตรวจสอบและลองใหม่อีกครั้ง";
+                resultContainer.classList.remove('hidden');
+            } finally {
+                // Hide loader and re-enable button
+                loader.classList.add('hidden');
+                generateButton.disabled = false;
+                generateButton.classList.remove('opacity-50');
+            }
+        }
+    </script>
+</body>
+</html>
