@@ -238,7 +238,7 @@
             let chatHistory = [];
             chatHistory.push({ role: "user", parts: [{ text: prompt }] });
             const payload = { contents: chatHistory };
-            const apiKey = ""; // API key is handled by the environment
+            const apiKey = "AIzaSyBC-vaae4Dr62AHqjDT9Tc6eJha_BJ5Cj0"; // API key is handled by the environment
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
             try {
