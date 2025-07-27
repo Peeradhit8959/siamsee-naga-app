@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base target="_top">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ใบเซียมซีองค์นาคราช</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #FFFFFF;
+            color: #111111;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .loading {
+            font-size: 1.2em;
+            color: #6A0DAD;
+        }
+        .fortune-card {
+            display: none; /* ซ่อนไว้ก่อนรอข้อมูล */
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            padding: 20px;
+            background-color: #6A0DAD;
+            color: #FFFFFF;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .body {
+            padding: 20px;
+            text-align: left;
+        }
+        .title-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 2px solid #E6E6FA;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .number-tag {
+            background-color: #E6E6FA;
+            color: #4B0082;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .fortune-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #4B0082;
+        }
+        .detail-row {
+            display: flex;
+            margin-bottom: 10px;
+            font-size: 0.95em;
+        }
+        .detail-row .label {
+            font-weight: bold;
+            color: #6A0DAD;
+            width: 120px;
+            flex-shrink: 0;
+        }
+        .detail-row .value {
+            color: #333333;
+        }
+        .advice {
+            margin-top: 20px;
+            border-top: 2px solid #E6E6FA;
+            padding-top: 15px;
+        }
+        .advice .label {
+            font-weight: bold;
+            color: #4B0082;
+        }
+        .footer {
+            padding: 20px;
+        }
+        button {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #6A0DAD;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1em;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loading-indicator" class="loading">
+            <p>องค์นาคราชกำลังประทานพร...</p>
+        </div>
+
+        <div id="fortune-container" class="fortune-card">
+            <div class="header">
+                <h1 id="fortune-title"></h1>
+            </div>
+            <div class="body">
+                <div class="title-box">
+                    <div id="fortune-number" class="number-tag"></div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="label">✨ ชะตาทั่วไป</div>
+                    <div id="fortune-main" class="value"></div>
+                </div>
+                <div class="detail-row">
+                    <div class="label">💼 การงาน</div>
+                    <div id="fortune-work" class="value"></div>
+                </div>
+                <div class="detail-row">
+                    <div class="label">💰 การเงิน</div>
+                    <div id="fortune-finance" class="value"></div>
+                </div>
+                <div class="detail-row">
+                    <div class="label">❤️ ความรัก</div>
+                    <div id="fortune-love" class="value"></div>
+                </div>
+                <div class="detail-row">
+                    <div class="label">💪 สุขภาพ</div>
+                    <div id="fortune-health" class="value"></div>
+                </div>
+                 <div class="detail-row">
+                    <div class="label">💎 เลขมงคล</div>
+                    <div id="fortune-lucky" class="value"></div>
+                </div>
+
+                <div class="advice">
+                    <div class="label">คำแนะนำจากองค์นาคราช</div>
+                    <p id="fortune-advice" class="value"></p>
+                </div>
+            </div>
+            <div class="footer">
+                <button onclick="retry()">เสี่ยงเซียมซีอีกครั้ง</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+        window.onload = function() {
+            liff.init({ liffId: "YOUR_LIFF_ID" }) // <-- คุณต้องใส่ LIFF ID ของคุณที่นี่
+                .then(() => {
+                    fetchFortuneData();
+                })
+                .catch((err) => {
+                    console.error(err);
+                    document.getElementById("loading-indicator").innerText = "เกิดข้อผิดพลาดในการเปิด LIFF App";
+                });
+        };
+
+        function fetchFortuneData() {
+            google.script.run
+                .withSuccessHandler(displayFortune)
+                .withFailureHandler(displayError)
+                .generateFortuneWithAI(); // เรียกใช้ฟังก์ชันฝั่ง Server
+        }
+
+        function displayFortune(data) {
+            if (data) {
+                document.getElementById("fortune-number").innerText = `เลขที่ ${data['เลขที่']}`;
+                document.getElementById("fortune-title").innerText = data['ชื่อใบเซียมซี'];
+                document.getElementById("fortune-main").innerText = data['ชะตาทั่วไป'];
+                document.getElementById("fortune-work").innerText = data['การงาน'];
+                document.getElementById("fortune-finance").innerText = data['การเงิน'];
+                document.getElementById("fortune-love").innerText = data['ความรัก'];
+                document.getElementById("fortune-health").innerText = data['สุขภาพ'];
+                document.getElementById("fortune-lucky").innerText = data['เลขมงคล'];
+                document.getElementById("fortune-advice").innerText = data['คำแนะนำ'];
+                
+                // ซ่อน loading และแสดงการ์ด
+                document.getElementById("loading-indicator").style.display = 'none';
+                document.getElementById("fortune-container").style.display = 'block';
+            } else {
+                displayError();
+            }
+        }
+
+        function displayError() {
+            document.getElementById("loading-indicator").innerText = "ขออภัย ไม่สามารถรับคำทำนายได้ในขณะนี้";
+        }
+
+        function retry() {
+            // โหลดหน้าใหม่เพื่อสุ่มอีกครั้ง
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>
